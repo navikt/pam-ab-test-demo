@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 1
       - name: fetch relevant branches
         run: |
-          git status
+          git branch -a
 #      - uses: actions/checkout@v1
 #      - uses: actions/setup-node@v1
 #      - uses: actions/cache@v1
