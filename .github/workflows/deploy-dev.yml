@@ -23,10 +23,11 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: build master
+      - name: build master branch
         run: |
+          git checkout master
           npm ci
-          npm run build-branch
+          npm run build
       - name: build ab-test branches
         run: |
           git branch -r |
