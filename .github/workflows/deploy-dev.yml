@@ -34,6 +34,7 @@ jobs:
           awk '{split($0,a,"/"); print a[2]"/"a[3]}' |
           xargs -L1 >> ab-test-branches.txt
           while read l; do git checkout "$l"; npm install && npm run build-branch; done < ab-test-branches.txt
+          git checkout $GITHUB_REF
       - name: pre-deploy
         uses: navikt/pam-deploy/actions/pre-deploy@v1
         env:
