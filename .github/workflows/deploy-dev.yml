@@ -23,9 +23,9 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: build master
+      - name: build master branch
         run: |
-          npm ci
+          npm install
           npm run build-branch
       - name: build ab-test branches
         run: |
@@ -33,8 +33,7 @@ jobs:
           grep --line-buffered ab-test |
           awk '{split($0,a,"/"); print a[2]"/"a[3]}' |
           xargs -n1 git checkout |
-          npm ci |
-          npm run build-branch
+          npm install && npm run build-branch
       - name: verify
         run: |
           cd dist
