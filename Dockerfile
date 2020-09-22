@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY server/ ./server
 COPY dist/ ./dist
-COPY package.json package-lock.json ./
+COPY package.json ./
 
 RUN npm config set strict-ssl false
 RUN npm ci --production
