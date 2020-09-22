@@ -1,0 +1,37 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: pam-ab-test-demo
+  namespace: teampam
+  labels:
+    team: teampam
+spec:
+  image: {{ image }}
+  port: 8080
+  liveness:
+    path: /internal/isAlive
+    initialDelay: 20
+  readiness:
+    path: /internal/isReady
+    initialDelay: 20
+  replicas:
+    min: 1
+    max: 1
+    cpuThresholdPercentage: 50
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  vault:
+    enabled: false
+  webproxy: false
+  prometheus:
+    enabled: false
+    path: /prometheus
+  ingresses:
+  {{#each ingress as |url|}}
+     - {{url}}
+  {{/each}}
