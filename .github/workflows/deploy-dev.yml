@@ -16,9 +16,31 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: fetch relevant branches
+      - uses: actions/setup-node@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: build master
         run: |
-          git branch -a
+          npm ci
+          npm run build-branch
+      - name: build ab-test branches
+        run: |
+          git branch -r |
+          grep --line-buffered ab-test |
+          awk '{split($0,a,"/"); print a[2]"/"a[3]}' |
+          xargs -n1 git checkout |
+          npm ci |
+          npm run build-branch
+      - name: verify
+        run: |
+          cd dist
+          ls
+
+
 #      - uses: actions/checkout@v1
 #      - uses: actions/setup-node@v1
 #      - uses: actions/cache@v1
