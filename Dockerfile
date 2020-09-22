@@ -4,6 +4,7 @@ WORKDIR /usr/src/app
 
 COPY server/ ./server
 COPY dist/ ./dist
+COPY package.json ./package.json
 
 ENV PORT=8080
 
