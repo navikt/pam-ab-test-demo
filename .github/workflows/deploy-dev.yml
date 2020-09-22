@@ -32,7 +32,7 @@ jobs:
           git branch -r |
           grep --line-buffered ab-test |
           awk '{split($0,a,"/"); print a[2]"/"a[3]}' |
-          xargs -n1 git checkout && npm install && npm run build-branch
+          xargs -n1 -L git checkout && npm install && npm run build-branch
       - name: verify
         run: |
           cd dist
