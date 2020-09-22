@@ -26,18 +26,18 @@ const userIsAssignedDist = (distName, res) => {
 const distributionIsEnabled = (distName) => unleash.isEnabled(`pam-ab-test-demo.ab-test.dist-${distName}`, {});
 
 const setupDistributionRoutes = (server) => {
-  server.use('/', express.static(path.resolve(__dirname, '../dist')));
+  server.use('/', express.static(path.resolve(__dirname, '../../dist')));
   server.use(['/'], (req, res) => {
     distributionPaths((distributions) => {
       distributions.map((dist) => {
         const distName = dist.split('/')[1];
         if (userIsInTestGroup(req)) {
-          return res.sendFile(path.resolve(__dirname, `../${getCookie(req, 'testGroup')}`, 'index.html'));
+          return res.sendFile(path.resolve(__dirname, `../../dist/${getCookie(req, 'testGroup')}`, 'index.html'));
         }
         if (distributionIsEnabled(distName) && userIsAssignedDist(distName, res)) {
-          return res.sendFile(path.resolve(__dirname, `../${dist}`, 'index.html'));
+          return res.sendFile(path.resolve(__dirname, `../../dist/${dist}`, 'index.html'));
         }
-        return res.sendFile(path.resolve(__dirname, '../dist/master', 'index.html'));
+        return res.sendFile(path.resolve(__dirname, '../../dist/master', 'index.html'));
       });
     });
   });
