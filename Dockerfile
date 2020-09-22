@@ -1,11 +1,15 @@
-FROM navikt/node-express:12.2.0
+FROM navikt/node-express:latest
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 COPY dist ./dist
 COPY server ./server
 COPY package.json package-lock.json ./
 
-RUN npm ci
+RUN npm config set strict-ssl false
+RUN npm ci --production
 
-CMD ["npm", "./server/server.js"]
+ENV PORT=8080
+
+EXPOSE 8080
+CMD ["npm", "run", "serve-express"]
