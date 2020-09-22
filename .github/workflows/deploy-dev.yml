@@ -8,7 +8,7 @@ on:
       - "CODEOWNERS"
     branches:
       - master
-      #- ab-test/**
+      - ab-test/**
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -34,24 +34,10 @@ jobs:
           awk '{split($0,a,"/"); print a[2]"/"a[3]}' |
           xargs -L1 >> ab-test-branches.txt
           while read l; do git checkout "$l"; npm install && npm run build-branch; done < ab-test-branches.txt
-      - name: verify
-        run: |
-          cd dist
-          ls
-
-
-#      - uses: actions/checkout@v1
-#      - uses: actions/setup-node@v1
-#      - uses: actions/cache@v1
-#        with:
-#          path: ~/.npm
-#          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-#          restore-keys: |
-#            ${{ runner.os }}-node-
-#      - name: pre-deploy
-#        uses: navikt/pam-deploy/actions/pre-deploy@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: pre-deploy
+        uses: navikt/pam-deploy/actions/pre-deploy@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #      - name: build and push docker image
 #        env:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
