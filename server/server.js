@@ -7,11 +7,10 @@ const setupHealthCheckEndpoints = require('./settings/healthCheckEndpoints');
 const PORT = process.env.PORT || 3000;
 const server = express();
 
-setupHealthCheckEndpoints(server);
-
 setupCertificates();
 configureDistributions();
 setupDistributionRoutes(server);
+setupHealthCheckEndpoints(server);
 
 // TODO - Setup amplitude endpoint.
 server.post('/amplitude', (req, res) => {
