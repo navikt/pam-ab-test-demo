@@ -4,8 +4,9 @@ const distributionPaths = require('./distributionPaths');
 const moveDistributionImages = (distPath) => {
   try {
     fs.renameSync(`${distPath}/img`, '../dist/img');
-  } catch {
+  } catch (e) {
     console.info(`No image directory for ${distPath}`);
+    console.error(e);
   }
 };
 
