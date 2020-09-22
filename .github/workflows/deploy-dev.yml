@@ -29,7 +29,11 @@ jobs:
           npm run build-branch
       - name: build ab-test branches
         run: |
-          git branch -r | grep --line-buffered ab-test | awk '{split($0,a,"/"); print a[2]"/"a[3]}' | xargs -n1 -L git checkout && npm install && npm run build-branch
+          git branch -r |
+          grep --line-buffered ab-test |
+          awk '{split($0,a,"/"); print a[2]"/"a[3]}' |
+          xargs -L1 xargs -L1 >> ab-test-branches.txt
+          while read l; do git checkout "$l"; npm install && npm run build-branch; done < ab-test-branches.txt
       - name: verify
         run: |
           cd dist
