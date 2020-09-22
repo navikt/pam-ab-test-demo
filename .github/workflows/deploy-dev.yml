@@ -23,13 +23,21 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: fetch relevant branches
+      - name: build master
         run: |
-          ls
           npm ci
           npm run build
+      - name: build ab-test branches
+        run: |
+          git branch -r |
+          grep --line-buffered ab-test |
+          awk '{split($0,a,"/"); print a[2]"/"a[3]}' |
+          npm ci && npm run build-ab-test-branch
+      - name: verify
+        run: |
+          cd dist
           ls
-          git branch -r | grep --line-buffered ab-test | awk '{split($0,a,"/"); print a[2]"/"a[3]}' | xargs -n1 git checkout
+
 
 #      - uses: actions/checkout@v1
 #      - uses: actions/setup-node@v1
