@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY dist/ ./dist
 COPY server/ ./server
-COPY package.json package-lock.json vue.config.js babel.config.js ./
+COPY package.json package-lock.json ./
 
 RUN npm --version
 RUN npm config set strict-ssl false
