@@ -28,7 +28,7 @@ jobs:
           git checkout master
           npm install
           npm run build-branch
-          cd dist && mkdir img && cd master && cp img/* ../img/ && cd ../..
+          mkdir dist/img && cp dist/master/img/* dist/img/
       - name: build ab-test branches
         run: |
           git branch -r |
@@ -37,7 +37,7 @@ jobs:
           xargs -L1 >> ab-test-branches.txt
           while read l; do git checkout "$l";
           npm install && npm run build-branch;
-          cd dist/$(git branch --show-current | awk '{n=split($0,a,"/"); print a[n]}') && cp img/* ../img/ && cd ..;
+          cp dist/$(git branch --show-current | awk '{n=split($0,a,"/"); print a[n]}')/img/* dist/img/;
           done < ab-test-branches.txt
           git checkout $GITHUB_REF
       - name: pre-deploy
