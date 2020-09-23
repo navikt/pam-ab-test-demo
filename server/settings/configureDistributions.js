@@ -1,14 +1,14 @@
 const fs = require('fs');
 const distributionPaths = require('./distributionPaths');
 
-const moveDistributionImages = (distPath) => {
+/* const moveDistributionImages = (distPath) => {
   try {
     fs.renameSync(`./${distPath}/img`, './dist/img');
   } catch (e) {
     console.info(`No image directory for ${distPath}`);
     console.error(e);
   }
-};
+}; */
 
 const rewriteFile = (distPath, data) => {
   const distFolder = distPath.split('/')[1];
@@ -33,7 +33,7 @@ const configureDistributions = () => {
   distributionPaths((distributions) => {
     distributions.forEach((distPath) => {
       readIndexFile(distPath, rewriteFile);
-      moveDistributionImages(distPath);
+      // moveDistributionImages(distPath);
     });
   });
 };
