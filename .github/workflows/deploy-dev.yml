@@ -27,6 +27,7 @@ jobs:
         run: |
           npm install
           npm run build-branch
+          cd dist && mkdir img && cd master && cp img/* ../img/ && cd ../..
       - name: build ab-test branches
         run: |
           git branch -r |
