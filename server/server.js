@@ -1,14 +1,15 @@
 const express = require('express');
 const setupCertificates = require('./settings/setupCertificates');
-const configureDistributions = require('./settings/configureDistributions');
+const { configureDistributions } = require('./settings/configureDistributions');
 const setupDistributionRoutes = require('./settings/setupDistributionRoutes');
 const setupHealthCheckEndpoints = require('./settings/healthCheckEndpoints');
+const { setupTestGroupInterceptor } = require('./settings/setupTestGroupInterceptor');
 
 const PORT = process.env.PORT || 3000;
 const server = express();
 
 setupHealthCheckEndpoints(server);
-
+setupTestGroupInterceptor(server);
 setupCertificates();
 configureDistributions();
 setupDistributionRoutes(server);
