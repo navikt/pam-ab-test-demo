@@ -25,6 +25,7 @@ jobs:
             ${{ runner.os }}-node-
       - name: build master branch
         run: |
+          git checkout master
           npm install
           npm run build-branch
           cd dist && mkdir img && cd master && cp img/* ../img/ && cd ../..
