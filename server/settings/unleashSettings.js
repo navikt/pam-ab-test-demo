@@ -1,7 +1,7 @@
 const { initialize } = require('unleash-client');
 
 const unleash = initialize({
-  url: 'https://unleashproxy.nais.oera.no/api/',
+  url: 'https://unleash.nais.adeo.no/api/',
   appName: 'pam-ab-test-demo',
 });
 
