@@ -24,7 +24,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: build master && test branches
-        uses: navikt/ab-test/actions/build@v1.0.0
+        uses: navikt/ab-test/actions/build@v1g
         with:
           build-script: build-branch
       - name: pre-deploy
