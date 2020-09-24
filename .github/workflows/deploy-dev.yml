@@ -23,23 +23,10 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: build master branch
-        run: |
-          git checkout master
-          npm install
-          npm run build-branch
-          mkdir dist/img && cp dist/master/img/* dist/img/
-      - name: build ab-test branches
-        run: |
-          git branch -r |
-          grep --line-buffered ab-test |
-          awk '{split($0,a,"/"); print a[2]"/"a[3]}' |
-          xargs -L1 >> ab-test-branches.txt
-          while read l; do git checkout "$l";
-          npm install && npm run build-branch;
-          cp dist/$(git branch --show-current | awk '{n=split($0,a,"/"); print a[n]}')/img/* dist/img/;
-          done < ab-test-branches.txt
-          git checkout $GITHUB_REF
+      - name: build master && test branches
+        uses: navikt/ab-test/actions/build@v1
+        with:
+          build-script: build-branch
       - name: pre-deploy
         uses: navikt/pam-deploy/actions/pre-deploy@v1
         env:
