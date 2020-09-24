@@ -11,8 +11,8 @@ const server = express();
 setupHealthCheckEndpoints(server);
 setupTestGroupInterceptor(server);
 setupCertificates();
-configureDistributions();
-setupDistributionRoutes(server);
+// configureDistributions();
+// setupDistributionRoutes(server);
 
 // TODO - Setup amplitude endpoint.
 server.post('/amplitude', (req, res) => {
