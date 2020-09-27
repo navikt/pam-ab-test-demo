@@ -10,6 +10,7 @@
     "serve-express": "node ./server/server.js"
   },
   "dependencies": {
+    "ab-test-middleware": "0.1.1-alpha",
     "core-js": "^3.6.5",
     "express": "^4.17.1",
     "ssl-root-cas": "^1.3.1",

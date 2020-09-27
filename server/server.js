@@ -1,8 +1,8 @@
 const express = require('express');
 const { initialize } = require('unleash-client');
+const { createAbTestMiddleware } = require('ab-test-middleware');
 const setupCertificates = require('./settings/setupCertificates');
 const healthCheckMiddleware = require('./healthcheck-middleware/HealthCheckMiddleware');
-const { createAbTestMiddleware } = require('./ab-test-middleware');
 
 if (process.env.NAIS_CLUSTER_NAME) {
   setupCertificates();
@@ -16,9 +16,7 @@ const unleash = initialize({
   appName: 'pam-ab-test-demo',
 });
 
-unleash.on('error', console.error);
-
-const toggleInterpreter = (distName, ctx) => unleash.isEnabled(`pam-ab-test-demo.dist.${distName}`, {} || ctx, false);
+const toggleInterpreter = (distName, ctx) => unleash.isEnabled(`pam-ab-test-demo.dist.${distName}`, ctx || {}, false);
 const tgToggleInterpreter = (distName, ctx) => unleash.isEnabled(`pam-ab-test-demo.dist.${distName}.group`, ctx || {}, false);
 
 server.use(healthCheckMiddleware);
