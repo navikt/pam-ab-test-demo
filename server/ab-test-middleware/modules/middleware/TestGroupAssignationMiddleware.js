@@ -3,6 +3,7 @@ const express = require('express');
 
 const cookieAge = 604800000 * 2;
 let testGroupToggleInterpreter;
+let randomizeTestDistribution;
 
 const testGroupAssignationMiddleware = (req, res, next) => {
   try {
@@ -17,7 +18,10 @@ const testGroupAssignationMiddleware = (req, res, next) => {
       return next();
     }
     let testGroupAssigned = false;
-    Object.keys(distributionToggles).forEach((d) => {
+    const toggles = randomizeTestDistribution
+      ? Object.keys(distributionToggles).sort(() => Math.random() - 0.5)
+      : Object.keys(distributionToggles);
+    toggles.forEach((d) => {
       if (!testGroupAssigned
         && d !== defaultDist
         && distributionToggles[d]
@@ -40,6 +44,7 @@ const testGroupAssignationMiddleware = (req, res, next) => {
 
 const createTestGroupAssignationMiddleware = (options) => {
   testGroupToggleInterpreter = options.testGroupToggleInterpreter;
+  randomizeTestDistribution = options.randomizeTestGroupDistribution;
   const router = express.Router();
   router.use(testGroupAssignationMiddleware);
   return router;
