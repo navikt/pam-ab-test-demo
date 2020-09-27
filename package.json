@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build-branch": "vue-cli-service build --no-clean --dest dist/$(git branch --show-current | awk '{n=split($0,a,\"/\"); print a[n]}')",
     "lint": "vue-cli-service lint",
     "serve-express": "node ./server/server.js"
   },
@@ -25,6 +26,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-vue": "^7.0.0-0",
+    "jest": "^26.4.2",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2"
   }
