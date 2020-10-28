@@ -15,6 +15,7 @@ setupDistributionRoutes(server);
 
 // TODO - Setup amplitude endpoint.
 server.post('/amplitude', (req, res) => {
+  // Not doing this anymore
   console.log(req, res);
 });
 
