@@ -9,6 +9,10 @@ on:
     branches:
       - master
       - ab-test/**
+  delete:
+    branches:
+      - ab-test/**
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -23,20 +27,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: build master branch
-        run: |
-          npm install
-          npm run build-branch
-          cd dist && mkdir img && cd master && cp img/* ../img/ && cd ../..
-      - name: build ab-test branches
-        run: |
-          git branch -r |
-          grep --line-buffered ab-test |
-          awk '{split($0,a,"/"); print a[2]"/"a[3]}' |
-          xargs -L1 >> ab-test-branches.txt
-          while read l; do git checkout "$l"; npm install && npm run build-branch; done < ab-test-branches.txt
-          cd dist/$(git branch --show-current | awk '{n=split($0,a,"/"); print a[n]}') && cp img/* ../img/ && cd ..
-          git checkout $GITHUB_REF
+      - uses: navikt/ab-test/actions/build@v1
       - name: pre-deploy
         uses: navikt/pam-deploy/actions/pre-deploy@v1
         env:

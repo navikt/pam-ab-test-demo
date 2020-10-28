@@ -1,17 +1,34 @@
 const express = require('express');
+const { initialize } = require('unleash-client');
+const { createAbTestMiddleware } = require('ab-test-middleware');
 const setupCertificates = require('./settings/setupCertificates');
-const configureDistributions = require('./settings/configureDistributions');
-const setupDistributionRoutes = require('./settings/setupDistributionRoutes');
-const setupHealthCheckEndpoints = require('./settings/healthCheckEndpoints');
+const healthCheckMiddleware = require('./healthcheck-middleware/HealthCheckMiddleware');
+
+if (process.env.NAIS_CLUSTER_NAME) {
+  setupCertificates();
+}
 
 const PORT = process.env.PORT || 3000;
 const server = express();
 
-setupHealthCheckEndpoints(server);
+const unleash = initialize({
+  url: 'http://localhost:4242/api/',
+  appName: 'pam-ab-test-demo',
+});
 
-setupCertificates();
-configureDistributions();
-setupDistributionRoutes(server);
+const toggleInterpreter = (distName, ctx) => unleash.isEnabled(`pam-ab-test-demo.dist.${distName}`, ctx || {}, false);
+const tgToggleInterpreter = (distName, ctx) => unleash.isEnabled(`pam-ab-test-demo.dist.${distName}.group`, ctx || {}, false);
+
+server.use(healthCheckMiddleware);
+server.use(createAbTestMiddleware({
+  defaultDist: 'master',
+  distFolder: 'dist',
+  cookieName: 'testGroup',
+  entryFile: 'index.html',
+  randomizeTestGroupDistribution: false,
+  testGroupToggleInterpreter: tgToggleInterpreter,
+  distributionToggleInterpreter: toggleInterpreter,
+}));
 
 // TODO - Setup amplitude endpoint.
 server.post('/amplitude', (req, res) => {
