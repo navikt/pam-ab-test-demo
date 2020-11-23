@@ -16,9 +16,9 @@ const unleash = initialize({
   appName: 'pam-ab-test-demo',
 });
 
-const distToggleInterpreter = (distName, ctx) => unleash.isEnabled(`pam-ab-test-demo.dist.${distName}`, ctx || {}, false);
+const distToggleInterpreter = (distName) => unleash.isEnabled(`pam-ab-test-demo.dist.${distName}`, {}, false);
 
-const testToggleInterpreter = (distName, ctx) => unleash.isEnabled(`pam-ab-test-demo.ab-test.${distName}`, ctx || {}, false);
+const testToggleInterpreter = (distName) => unleash.isEnabled(`pam-ab-test-demo.ab-test.${distName}`, {}, false);
 
 app.use(healthCheckMiddleware);
 app.use(createAbTestMiddleware({
