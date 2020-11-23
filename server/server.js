@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak */
 const express = require('express');
 const { initialize } = require('unleash-client');
 const { createAbTestMiddleware } = require('ab-test-middleware');
@@ -11,16 +12,19 @@ if (process.env.NAIS_CLUSTER_NAME) {
 const PORT = process.env.PORT || 3000;
 const app = express();
 
+app.use(healthCheckMiddleware);
+
 const unleash = initialize({
   url: 'http://localhost:4242/api/',
   appName: 'pam-ab-test-demo',
 });
 
-const distToggleInterpreter = (distName) => unleash.isEnabled(`pam-ab-test-demo.dist.${distName}`, {}, false);
+const distToggleInterpreter = (distName) =>
+  unleash.isEnabled(`pam-ab-test-demo.dist.${distName}`, {}, false);
 
-const testToggleInterpreter = (distName) => unleash.isEnabled(`pam-ab-test-demo.ab-test.${distName}`, {}, false);
+const testToggleInterpreter = (distName) =>
+  unleash.isEnabled(`pam-ab-test-demo.ab-test.${distName}`, {}, false);
 
-app.use(healthCheckMiddleware);
 app.use(createAbTestMiddleware({
   defaultDist: 'master',
   distFolder: 'dist',
