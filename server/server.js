@@ -27,7 +27,7 @@ app.use(createAbTestMiddleware({
   cookieName: 'testGroup',
   entryFile: 'index.html',
   ingresses: ['/'],
-  randomizeTestGroupDistribution: false,
+  randomizeTestGroupDistribution: true, // This will be the default value from v0.2.0 and on
   testGroupToggleInterpreter: testToggleInterpreter,
   distributionToggleInterpreter: distToggleInterpreter,
 }));
