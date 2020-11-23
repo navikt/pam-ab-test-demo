@@ -9,30 +9,27 @@ if (process.env.NAIS_CLUSTER_NAME) {
 }
 
 const PORT = process.env.PORT || 3000;
-const server = express();
+const app = express();
 
 const unleash = initialize({
   url: 'http://localhost:4242/api/',
   appName: 'pam-ab-test-demo',
 });
 
-const toggleInterpreter = (distName, ctx) => unleash.isEnabled(`pam-ab-test-demo.dist.${distName}`, ctx || {}, false);
-const tgToggleInterpreter = (distName, ctx) => unleash.isEnabled(`pam-ab-test-demo.dist.${distName}.group`, ctx || {}, false);
+const distToggleInterpreter = (distName, ctx) => unleash.isEnabled(`pam-ab-test-demo.dist.${distName}`, ctx || {}, false);
 
-server.use(healthCheckMiddleware);
-server.use(createAbTestMiddleware({
+const testToggleInterpreter = (distName, ctx) => unleash.isEnabled(`pam-ab-test-demo.ab-test.${distName}`, ctx || {}, false);
+
+app.use(healthCheckMiddleware);
+app.use(createAbTestMiddleware({
   defaultDist: 'master',
   distFolder: 'dist',
   cookieName: 'testGroup',
   entryFile: 'index.html',
+  ingresses: ['/'],
   randomizeTestGroupDistribution: false,
-  testGroupToggleInterpreter: tgToggleInterpreter,
-  distributionToggleInterpreter: toggleInterpreter,
+  testGroupToggleInterpreter: testToggleInterpreter,
+  distributionToggleInterpreter: distToggleInterpreter,
 }));
 
-// TODO - Setup amplitude endpoint.
-server.post('/amplitude', (req, res) => {
-  console.log(req, res);
-});
-
-server.listen(PORT, () => console.log(`Started serving on port ${PORT}`));
+app.listen(PORT, () => console.log(`Started serving on port ${PORT}`));
