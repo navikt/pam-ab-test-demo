@@ -33,7 +33,7 @@ jobs:
           test-branch-prefix: ab-test/
           build-script: build
           dist-directory: dist
-          output-directory: build
+          output-directory: dist
       - name: pre-deploy
         uses: navikt/pam-deploy/actions/pre-deploy@v1
         env:
